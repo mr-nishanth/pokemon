@@ -5,12 +5,29 @@ import Filters from '@/components/Filters';
 import Header from '@/components/Header';
 import PokemonCard from '@/components/PokemonCard';
 import { usePokemon } from '@/hooks/usePokemon';
+import { usePokemonV2 } from '@/hooks/usePokemonV2';
+import { usePokemonStore } from '@/store/usePokemonStore';
 import { motion } from 'motion/react';
 import Image from 'next/image';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 
 export default function Home() {
-  const { pokemonListDetails, loading, loadMore } = usePokemon();
+  // const { pokemonListDetails, loading, loadMore } = usePokemon();
+  // const { pokemonListDetails, loading, loadMore } = usePokemonV2();
+
+  const { pokemonListDetails, loading, loadMore, fetchPokemon } =
+    usePokemonStore(
+      useShallow((state) => ({
+        pokemonListDetails: state.pokemonListDetails,
+        loading: state.loading,
+        loadMore: state.loadMore,
+        fetchPokemon: state.fetchPokemon,
+      }))
+    );
+
+  console.log({ pokemonListDetails });
+
   const observerRef = useRef<IntersectionObserver | null>(null);
   const [isFetching, setIsFetching] = useState(false);
 
@@ -39,8 +56,11 @@ export default function Home() {
     [loading, loadMore, isFetching]
   );
 
+  useEffect(() => {
+    fetchPokemon();
+  }, [fetchPokemon]);
   return (
-    <main>
+    <main className="homepage-background">
       <Header />
       <section>
         <Filters />
@@ -58,7 +78,7 @@ export default function Home() {
               }
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.3, delay: index * 0.02 }} // Faster animation
+              transition={{ duration: 0.3, delay: index * 0.02 }}
               // transition={{ duration: 0.5, delay: index * 0.1 }} // Delay based on the index for staggered animation
             >
               <PokemonCard pokemon={pokemon} />
