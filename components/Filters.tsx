@@ -14,6 +14,8 @@ import { Button } from './ui/button';
 import { CircleDot, Delete, Ruler, SortAsc, Weight, Zap } from 'lucide-react';
 import { Input } from './ui/input';
 import { usePokemon } from '@/hooks/usePokemon';
+import { useShallow } from 'zustand/react/shallow';
+import { usePokemonStore } from '@/store/usePokemonStore';
 
 const pokemonTypes = [
   'Normal',
@@ -60,7 +62,16 @@ const pokemonAbilities = [
 ];
 
 function Filters() {
-  const { handleFilterChange, filters, clearFilters } = usePokemon();
+  // const { handleFilterChange, filters, clearFilters } = usePokemon();
+
+  const { handleFilterChange, filters, clearFilters } = usePokemonStore(
+    useShallow((state) => ({
+      handleFilterChange: state.handleFilterChange,
+      filters: state.filters,
+      clearFilters: state.clearFilters,
+    }))
+  );
+
   return (
     <div className="mt-8 px-16 py-4 flex items-center justify-between">
       <div className="flex flex-wrap gap-4 items-center">
@@ -107,7 +118,7 @@ function Filters() {
             ))}
           </SelectContent>
         </Select>
-
+        {/* 
         <div className="relative">
           <Weight className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
 
@@ -131,7 +142,7 @@ function Filters() {
             className="u-shadow-2 w-[180px] pl-9 text-gray-500 font-bold border-none outline-none bg-white rounded-lg
             focus-visible:ring-2 focus-visible:ring-gray-200"
           />
-        </div>
+        </div> */}
 
         <Select
           value={filters.sortOrder}
@@ -156,7 +167,7 @@ function Filters() {
 
       <Button
         onClick={clearFilters}
-        className="u-shadow-2 font-bold bg-[#6c5ce7] rounded-lg flex items-center gap-1"
+        className="u-shadow-2 font-bold bg-[#ee9c30] rounded-lg flex items-center gap-1"
       >
         <Delete className="mr-2 h-5 w-5" />
         Clear Filters
