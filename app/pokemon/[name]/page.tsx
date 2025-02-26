@@ -1,30 +1,57 @@
 // pokemon-explorer/app/pokemon/[name]/page.tsx
 'use client';
+
+import { useEffect, useState } from 'react';
 import Header from '@/components/Header';
 import { motion } from 'motion/react';
-
 import { usePokemon } from '@/hooks/usePokemon';
 import { typeColor } from '@/utils/colors';
-
 import { Ruler, Volume2, Weight } from 'lucide-react';
 import Image from 'next/image';
-import { use } from 'react';
+import { toTitleCase } from '@/lib/utils';
 
 interface Props {
   params: Promise<{ name: string }>;
 }
 
-function PokemonDetailsPage({ params }: Props) {
-  const { name } = use(params);
-
+export default function PokemonDetailsPage({ params }: Props) {
+  const [currentName, setCurrentName] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const { fetchPokemonByName, loading, activePokemon } = usePokemon();
 
-  // Fetch pokemon by name when the name changes
-  // useEffect(() => {
-  //   if (name) {
-  //     fetchPokemonByName(name);
-  //   }
-  // }, [name, fetchPokemonByName]);
+  useEffect(() => {
+    const fetchParams = async () => {
+      const resolvedParams = await params;
+      const name = resolvedParams.name;
+
+      if (name !== currentName) {
+        setCurrentName(name);
+        fetchPokemonByName(name);
+        setIsLoading(true);
+      }
+    };
+
+    fetchParams();
+  }, [params, currentName, fetchPokemonByName]);
+
+  if (!isLoading || !activePokemon) {
+    return (
+      <motion.div
+        className="h-[80vh] flex justify-center items-center loading-background"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
+        <Image
+          src="/pokemon.gif"
+          alt="pokeball"
+          width={100}
+          height={100}
+          className="animate-spin"
+        />
+      </motion.div>
+    );
+  }
 
   return (
     <main>
@@ -99,7 +126,8 @@ function PokemonDetailsPage({ params }: Props) {
                     key={index}
                     className="px-4 py-2 flex items-center gap-2 text-sm font-bold bg-white text-[#54a0ff] rounded-full"
                   >
-                    {ability.ability.name}
+                    {/* {ability.ability.name.toTitleCase()} */}
+                    {toTitleCase(ability.ability.name)}
                   </li>
                 ))}
               </ul>
@@ -113,7 +141,7 @@ function PokemonDetailsPage({ params }: Props) {
                     key={index}
                     className="px-4 py-2 flex items-center gap-2 text-sm font-bold bg-zinc-700 text-white rounded-full"
                   >
-                    {type.type.name}
+                    {toTitleCase(type.type.name)}
                   </li>
                 ))}
               </ul>
@@ -138,7 +166,9 @@ function PokemonDetailsPage({ params }: Props) {
                   transition={{ delay: 0.2, duration: 0.5 }}
                 >
                   <div className="flex items-center gap-4">
-                    <span className="capitalize">{stat.stat.name}</span>
+                    <span className="capitalize">
+                      {toTitleCase(stat.stat.name)}
+                    </span>
                     <span className="font-bold">{stat.base_stat}</span>
                   </div>
 
@@ -216,26 +246,6 @@ function PokemonDetailsPage({ params }: Props) {
           />
         </div>
       </motion.section>
-
-      {/* Loading State */}
-      {loading && (
-        <motion.div
-          className="h-[80vh] flex justify-center items-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1 }}
-        >
-          <Image
-            src="/pokemon.gif"
-            alt="pokeball"
-            width={100}
-            height={100}
-            className="animate-spin"
-          />
-        </motion.div>
-      )}
     </main>
   );
 }
-
-export default PokemonDetailsPage;
