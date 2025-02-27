@@ -10,21 +10,15 @@ import { useState, useEffect, useCallback } from 'react';
 import debounce from 'lodash/debounce';
 
 function SearchForm() {
-  const {
-    searchQuery,
-    loading,
-    handleSearchChange,
-    filterPokemon,
-    isHydrated,
-  } = usePokemonStore(
-    useShallow((state) => ({
-      searchQuery: state.searchQuery,
-      loading: state.loading,
-      handleSearchChange: state.handleSearchChange,
-      filterPokemon: state.filterPokemon,
-      isHydrated: state.isHydrated,
-    }))
-  );
+  const { searchQuery, loading, handleSearchChange, filterPokemon } =
+    usePokemonStore(
+      useShallow((state) => ({
+        searchQuery: state.searchQuery,
+        loading: state.loading,
+        handleSearchChange: state.handleSearchChange,
+        filterPokemon: state.filterPokemon,
+      }))
+    );
 
   const [debouncedSearch, setDebouncedSearch] = useState(searchQuery);
 
@@ -49,14 +43,6 @@ function SearchForm() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDebouncedSearch(e.target.value); // Update debounced search state
   };
-
-  // This useEffect ensures that once the store is hydrated, we trigger the first fetch
-  useEffect(() => {
-    if (isHydrated) {
-      // Perform actions after hydration is done (like fetching data if needed)
-      filterPokemon(); // Trigger the filter when hydrated
-    }
-  }, [isHydrated, filterPokemon]);
 
   return (
     <div className="relative w-full md:w-[40%] mx-auto">
