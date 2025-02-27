@@ -11,18 +11,15 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 
 export default function Home() {
-  const { pokemonListDetails, loading, loadMore, fetchPokemon, isHydrated } =
+  const { pokemonListDetails, loading, loadMore, fetchPokemon } =
     usePokemonStore(
       useShallow((state) => ({
         pokemonListDetails: state.pokemonListDetails,
         loading: state.loading,
         loadMore: state.loadMore,
         fetchPokemon: state.fetchPokemon,
-        isHydrated: state.isHydrated,
       }))
     );
-
-  console.log({ pokemonListDetails });
 
   const observerRef = useRef<IntersectionObserver | null>(null);
 
@@ -50,13 +47,8 @@ export default function Home() {
   );
 
   useEffect(() => {
-    if (!isHydrated) {
-      // Wait until the store is hydrated before performing any logic
-      console.log('Hydration in progress...');
-    } else {
-      fetchPokemon();
-    }
-  }, [isHydrated, fetchPokemon]);
+    fetchPokemon();
+  }, [fetchPokemon]);
 
   return (
     <main className="homepage-background">
