@@ -21,7 +21,7 @@ function PokemonCard({ pokemon }: PokemonCardProps) {
       whileHover={{ scale: 1.05 }} // Scale the card up on hover
       transition={{ type: 'spring', stiffness: 300 }} // Smooth spring effect
     >
-      <div className="flex gap-4 py-4">
+      <div className="flex flex-col sm:flex-row gap-4 py-4">
         <div className="flex-1">
           <Image
             src={
