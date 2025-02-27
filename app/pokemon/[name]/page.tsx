@@ -1,4 +1,3 @@
-// pokemon-explorer/app/pokemon/[name]/page.tsx
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -9,6 +8,8 @@ import { typeColor } from '@/utils/colors';
 import { Ruler, Star, Volume2, Weight } from 'lucide-react';
 import Image from 'next/image';
 import { toTitleCase } from '@/lib/utils';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 interface Props {
   params: Promise<{ name: string }>;
@@ -37,7 +38,7 @@ export default function PokemonDetailsPage({ params }: Props) {
   if (!isLoading || !activePokemon) {
     return (
       <motion.div
-        className="h-[80vh] flex justify-center items-center loading-background"
+        className="h-screen w-screen flex justify-center items-center loading-background"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
@@ -56,10 +57,9 @@ export default function PokemonDetailsPage({ params }: Props) {
   return (
     <main>
       <Header />
-
       {/* Main section with animations */}
       <motion.section
-        className="px-16 py-8 min-h-[90vh] grid grid-cols-1 md:grid-cols-2 gap-8"
+        className="px-4 py-8 min-h-[90vh] grid grid-cols-1 gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2"
         style={{
           background:
             typeColor[
@@ -76,17 +76,25 @@ export default function PokemonDetailsPage({ params }: Props) {
       >
         {/* Left Section: Pokemon Info */}
         <div className="flex flex-col justify-center gap-6">
+          {/* Back Button */}
+          <div className="flex justify-start mt-4 ml-4">
+            <Button
+              className="u-shadow-2 font-bold bg-[#ee9c30] rounded-lg flex items-center gap-1"
+              asChild
+            >
+              <Link href="/">Back to PokeLand</Link>
+            </Button>
+          </div>
           {/* Pokemon Name and Cry Buttons */}
           <motion.div
-            className="flex flex-col gap-1"
+            className="flex flex-col gap-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2, duration: 0.5 }}
           >
             <div className="flex gap-4">
               <button
-                className="px-4 py-2 flex items-center gap-2 text-sm font-bold bg-white text-[#54a0ff] rounded-full
-                    hover:bg-white/90 transition-all duration-300 ease-in-out"
+                className="px-4 py-2 flex items-center gap-2 text-sm font-bold bg-white text-[#54a0ff] rounded-full hover:bg-white/90 transition-all duration-300 ease-in-out"
                 onClick={() => {
                   const audio = new Audio(activePokemon?.cries.legacy);
                   audio.play();
@@ -95,8 +103,7 @@ export default function PokemonDetailsPage({ params }: Props) {
                 <Volume2 /> Old Cry
               </button>
               <button
-                className="px-4 py-2 flex items-center gap-2 text-sm font-bold bg-white text-[#54a0ff] rounded-full
-                    hover:bg-white/90 transition-all duration-300 ease-in-out"
+                className="px-4 py-2 flex items-center gap-2 text-sm font-bold bg-white text-[#54a0ff] rounded-full hover:bg-white/90 transition-all duration-300 ease-in-out"
                 onClick={() => {
                   const audio = new Audio(activePokemon?.cries.latest);
                   audio.play();
@@ -106,7 +113,7 @@ export default function PokemonDetailsPage({ params }: Props) {
               </button>
             </div>
 
-            <h1 className="text-6xl font-bold capitalize text-white drop-shadow-sm mt-4">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold capitalize text-white drop-shadow-sm mt-4">
               {activePokemon?.name}
             </h1>
           </motion.div>
@@ -119,14 +126,13 @@ export default function PokemonDetailsPage({ params }: Props) {
             transition={{ delay: 0.4, duration: 0.5 }}
           >
             <div className="flex flex-col gap-2">
-              <h2 className="text-2xl font-bold">Abilities</h2>
-              <ul className="flex gap-2">
+              <h2 className="text-xl md:text-2xl font-bold">Abilities</h2>
+              <ul className="flex gap-2 flex-wrap">
                 {activePokemon?.abilities.map((ability: any, index: number) => (
                   <li
                     key={index}
                     className="px-4 py-2 flex items-center gap-2 text-sm font-bold bg-white text-[#54a0ff] rounded-full"
                   >
-                    {/* {ability.ability.name.toTitleCase()} */}
                     {toTitleCase(ability.ability.name)}
                   </li>
                 ))}
@@ -134,7 +140,7 @@ export default function PokemonDetailsPage({ params }: Props) {
             </div>
 
             <div className="flex flex-col gap-2">
-              <h2 className="text-2xl font-bold">Types</h2>
+              <h2 className="text-xl md:text-2xl font-bold">Types</h2>
               <ul className="flex flex-wrap gap-2">
                 {activePokemon?.types.map((type: any, index: number) => (
                   <li
@@ -155,7 +161,7 @@ export default function PokemonDetailsPage({ params }: Props) {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.5 }}
           >
-            <h2 className="text-2xl font-bold">Base Stats</h2>
+            <h2 className="text-xl md:text-2xl font-bold">Base Stats</h2>
             <ul className="flex flex-col gap-4">
               {activePokemon?.stats.map((stat: any, index: number) => (
                 <motion.li
@@ -190,7 +196,7 @@ export default function PokemonDetailsPage({ params }: Props) {
 
           {/* Height, Weight, Base Experience */}
           <motion.div
-            className="mt-2 flex gap-4"
+            className="mt-2 flex gap-4 flex-wrap"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8, duration: 0.5 }}
