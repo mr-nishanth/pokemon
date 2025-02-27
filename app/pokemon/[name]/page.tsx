@@ -1,15 +1,15 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Header from '@/components/Header';
-import { motion } from 'motion/react';
-import { usePokemon } from '@/hooks/usePokemon';
+import { Button } from '@/components/ui/button';
+import { toTitleCase } from '@/lib/utils';
+import { usePokemonStore } from '@/store/usePokemonStore';
 import { typeColor } from '@/utils/colors';
 import { Ruler, Star, Volume2, Weight } from 'lucide-react';
+import { motion } from 'motion/react';
 import Image from 'next/image';
-import { toTitleCase } from '@/lib/utils';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+import { useEffect, useState } from 'react';
 
 interface Props {
   params: Promise<{ name: string }>;
@@ -18,7 +18,7 @@ interface Props {
 export default function PokemonDetailsPage({ params }: Props) {
   const [currentName, setCurrentName] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const { fetchPokemonByName, loading, activePokemon } = usePokemon();
+  const { fetchPokemonByName, loading, activePokemon } = usePokemonStore();
 
   useEffect(() => {
     const fetchParams = async () => {
