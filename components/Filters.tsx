@@ -60,8 +60,6 @@ const pokemonAbilities = [
 ];
 
 function Filters() {
-  // const { handleFilterChange, filters, clearFilters } = usePokemon();
-
   const { handleFilterChange, filters, clearFilters } = usePokemonStore(
     useShallow((state) => ({
       handleFilterChange: state.handleFilterChange,
@@ -71,14 +69,14 @@ function Filters() {
   );
 
   return (
-    <div className="mt-8 px-16 py-4 flex items-center justify-between">
+    <div className="mt-8 px-4 py-4 flex flex-col md:flex-row items-start justify-between gap-6">
       <div className="flex flex-wrap gap-4 items-center">
         <Select
           value={filters.type}
           onValueChange={(value) => handleFilterChange('type', value)}
         >
           <SelectTrigger
-            className="u-shadow-2 w-[180px] text-gray-500 font-bold border-none bg-white rounded-lg
+            className="u-shadow-2 w-[130px] text-gray-500 font-bold border-none bg-white rounded-lg
             focus:ring-2 focus:ring-gray-200"
           >
             <div className="flex items-center gap-1">
@@ -101,7 +99,7 @@ function Filters() {
           onValueChange={(value) => handleFilterChange('ability', value)}
         >
           <SelectTrigger
-            className="u-shadow-2 w-[180px] text-gray-500 font-bold border-none bg-white rounded-lg
+            className="u-shadow-2 w-[130px] text-gray-500 font-bold border-none bg-white rounded-lg
           focus:ring-2 focus:ring-gray-200"
           >
             <div className=" flex items-center gap-1">
@@ -125,7 +123,7 @@ function Filters() {
             type="number"
             placeholder="Weight"
             value={filters.weight}
-            className="u-shadow-2 w-[180px] pl-9 text-gray-500 font-bold border-none outline-none bg-white rounded-lg
+            className="u-shadow-2 w-[130px] pl-9 text-gray-500 font-bold border-none outline-none bg-white rounded-lg
             focus-visible:ring-2 focus-visible:ring-gray-200"
             onChange={(e) => handleFilterChange('weight', e.target.value)}
           />
@@ -138,7 +136,7 @@ function Filters() {
             placeholder="Height"
             value={filters.height}
             onChange={(e) => handleFilterChange('height', e.target.value)}
-            className="u-shadow-2 w-[180px] pl-9 text-gray-500 font-bold border-none outline-none bg-white rounded-lg
+            className="u-shadow-2 w-[130px] pl-9 text-gray-500 font-bold border-none outline-none bg-white rounded-lg
             focus-visible:ring-2 focus-visible:ring-gray-200"
           />
         </div>
@@ -148,7 +146,7 @@ function Filters() {
           onValueChange={(value) => handleFilterChange('sortOrder', value)}
         >
           <SelectTrigger
-            className="u-shadow-2 w-[180px] text-gray-500 font-bold border-none bg-white rounded-lg
+            className="u-shadow-2 w-[130px] text-gray-500 font-bold border-none bg-white rounded-lg
             focus:ring-2 focus:ring-gray-200"
           >
             <div className="flex items-center gap-1">
