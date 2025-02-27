@@ -4,8 +4,6 @@
 import Filters from '@/components/Filters';
 import Header from '@/components/Header';
 import PokemonCard from '@/components/PokemonCard';
-import { usePokemon } from '@/hooks/usePokemon';
-import { usePokemonV2 } from '@/hooks/usePokemonV2';
 import { usePokemonStore } from '@/store/usePokemonStore';
 import { motion } from 'motion/react';
 import Image from 'next/image';
@@ -13,39 +11,34 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 
 export default function Home() {
-  // const { pokemonListDetails, loading, loadMore } = usePokemon();
-  // const { pokemonListDetails, loading, loadMore } = usePokemonV2();
-
-  const { pokemonListDetails, loading, loadMore, fetchPokemon } =
+  const { pokemonListDetails, loading, loadMore, fetchPokemon, isHydrated } =
     usePokemonStore(
       useShallow((state) => ({
         pokemonListDetails: state.pokemonListDetails,
         loading: state.loading,
         loadMore: state.loadMore,
         fetchPokemon: state.fetchPokemon,
+        isHydrated: state.isHydrated,
       }))
     );
 
   console.log({ pokemonListDetails });
 
   const observerRef = useRef<IntersectionObserver | null>(null);
-  const [isFetching, setIsFetching] = useState(false);
 
   // Optimized Infinite Scroll Observer with Debounce
   const lastPokemonCallback = useCallback(
     (node: HTMLDivElement | null) => {
-      if (loading || isFetching) return;
+      // Prevent new API calls while loading
+      if (loading) return;
 
       if (observerRef.current) observerRef.current.disconnect();
 
       observerRef.current = new IntersectionObserver(
         (entries) => {
-          if (entries[0].isIntersecting) {
-            setIsFetching(true);
-            setTimeout(() => {
-              loadMore();
-              setIsFetching(false);
-            }, 500); // Debounce API calls
+          if (entries[0].isIntersecting && !loading) {
+            // Call loadMore function if the last card is in view
+            loadMore();
           }
         },
         { rootMargin: '300px' } // Load earlier
@@ -53,12 +46,18 @@ export default function Home() {
 
       if (node) observerRef.current.observe(node);
     },
-    [loading, loadMore, isFetching]
+    [loading, loadMore] // Dependencies to watch for loading state changes
   );
 
   useEffect(() => {
-    fetchPokemon();
-  }, [fetchPokemon]);
+    if (!isHydrated) {
+      // Wait until the store is hydrated before performing any logic
+      console.log('Hydration in progress...');
+    } else {
+      fetchPokemon();
+    }
+  }, [isHydrated, fetchPokemon]);
+
   return (
     <main className="homepage-background">
       <Header />
@@ -79,7 +78,6 @@ export default function Home() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.3, delay: index * 0.02 }}
-              // transition={{ duration: 0.5, delay: index * 0.1 }} // Delay based on the index for staggered animation
             >
               <PokemonCard pokemon={pokemon} />
             </motion.div>
@@ -97,7 +95,7 @@ export default function Home() {
         >
           <Image
             src="/pokemon.gif"
-            alt="pokeball"
+            alt="poke-ball"
             width={100}
             height={100}
             className="animate-spin"
