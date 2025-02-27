@@ -1,8 +1,7 @@
 // stores/usePokemonStore.ts
-
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { indexedDBStorage } from '@/lib/indexedDBStorage'; // Import custom IndexedDB storage
+import { indexedDBStorage } from '@/lib/indexedDBStorage'; // Custom IndexedDB storage
 import { POKEMON_BASE_URI, DEFAULT_LIMIT } from '@/constants';
 import axios from 'axios';
 import { fetchWithRetry } from '@/lib/utils';
@@ -61,11 +60,12 @@ interface PokemonState {
   currentPage: number;
   allPokemon: Pokemon[];
   originalPokemonListDetails: PokemonDetails[];
+  isHydrated: boolean; // Track hydration status
   fetchPokemon: (page?: number) => Promise<void>;
   fetchAllPokemon: () => Promise<void>;
   fetchPokemonDetails: (pokemonList: Pokemon[]) => Promise<void>;
   fetchPokemonByName: (name: string) => Promise<void>;
-  handleSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleSearchChange: (query: string) => void;
   handleFilterChange: (key: keyof Filters, value: string) => void;
   filterPokemon: () => void;
   loadMore: () => void;
@@ -90,6 +90,7 @@ export const usePokemonStore = create<PokemonState>()(
       currentPage: 1,
       allPokemon: [],
       originalPokemonListDetails: [],
+      isHydrated: false, // Default to false until hydration is completed
 
       fetchAllPokemon: async () => {
         try {
@@ -160,6 +161,12 @@ export const usePokemonStore = create<PokemonState>()(
         }
       },
 
+      // This will be executed after rehydration
+      onRehydrateStorage: (state: PokemonState | undefined) => {
+        console.log('Rehydration finished');
+        set({ isHydrated: true }); // Set hydration status to true
+      },
+
       fetchPokemonByName: async (name: string) => {
         set({ loading: true });
         try {
@@ -171,8 +178,8 @@ export const usePokemonStore = create<PokemonState>()(
         }
       },
 
-      handleSearchChange: (e) => {
-        set({ searchQuery: e.target.value });
+      handleSearchChange: (query) => {
+        set({ searchQuery: query });
       },
 
       handleFilterChange: (key, value) => {
@@ -207,9 +214,6 @@ export const usePokemonStore = create<PokemonState>()(
           );
         }
 
-        console.log({ weight });
-        console.log({ filteredPokemon });
-
         if (height) {
           filteredPokemon = filteredPokemon.filter(
             (pokemon) => pokemon.height >= parseInt(height)
@@ -221,6 +225,8 @@ export const usePokemonStore = create<PokemonState>()(
             pokemon.name.toLowerCase().includes(query)
           );
         }
+
+        console.log({ filteredPokemon });
 
         if (sortOrder) {
           filteredPokemon =
@@ -259,7 +265,7 @@ export const usePokemonStore = create<PokemonState>()(
     }),
     {
       name: 'pokemon-storage',
-      storage: indexedDBStorage,
+      storage: indexedDBStorage, // Custom IndexedDB storage
     }
   )
 );
