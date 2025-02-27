@@ -100,8 +100,6 @@ export const usePokemonStore = create<PokemonState>()((set, get) => ({
   fetchPokemon: async (page = 1) => {
     set({ loading: true });
     try {
-      console.log('Fetching page:', page);
-
       const offset = (page - 1) * DEFAULT_LIMIT;
       const res = await axios.get(
         `${POKEMON_BASE_URI}/pokemon?offset=${offset}&limit=${DEFAULT_LIMIT}`
@@ -217,8 +215,6 @@ export const usePokemonStore = create<PokemonState>()((set, get) => ({
         pokemon.name.toLowerCase().includes(query)
       );
     }
-
-    console.log({ filteredPokemon });
 
     if (sortOrder) {
       filteredPokemon =
