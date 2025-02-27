@@ -75,7 +75,7 @@ export default function PokemonDetailsPage({ params }: Props) {
         transition={{ duration: 0.7 }}
       >
         {/* Left Section: Pokemon Info */}
-        <div className="flex flex-col justify-center gap-6">
+        <div className="flex flex-col justify-center gap-6 order-2 md:order-1">
           {/* Back Button */}
           <div className="flex justify-start mt-4 ml-4">
             <Button
@@ -223,10 +223,32 @@ export default function PokemonDetailsPage({ params }: Props) {
               {activePokemon?.base_experience} xp
             </p>
           </motion.div>
+
+          {/* Moves Section */}
+          <motion.div
+            className="mt-8"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1, duration: 0.5 }}
+          >
+            <h2 className="text-xl md:text-2xl font-bold mb-4">Moves</h2>
+            <ul className="flex flex-wrap gap-4">
+              {activePokemon?.moves
+                ?.slice(0, 24)
+                ?.map((item: any, index: number) => (
+                  <li
+                    key={index}
+                    className="px-4 py-2 flex items-center gap-2 text-sm font-bold bg-zinc-700 text-white rounded-full"
+                  >
+                    {toTitleCase(item.move.name)}
+                  </li>
+                ))}
+            </ul>
+          </motion.div>
         </div>
 
         {/* Right Section: Pokemon Image */}
-        <div className="relative flex justify-center items-center">
+        <div className="relative flex justify-center items-center order-1 md:order-2">
           <Image
             src={`/icons/${activePokemon?.types[0].type.name}.svg`}
             alt="pokemon type"
