@@ -39,6 +39,7 @@ interface PokemonDetails {
     back_shiny: string;
   };
   base_experience: number;
+  moves: { move: { name: string } }[];
 }
 
 interface Filters {
