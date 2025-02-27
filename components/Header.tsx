@@ -5,15 +5,16 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import SearchForm from './SearchForm';
+import { usePathname } from 'next/navigation';
 
 function Header() {
   const [scrolling, setScrolling] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
-    // Detect scroll to add/remove styles dynamically
     const handleScroll = () => {
       if (window.scrollY > 50) {
-        setScrolling(true); // Change header style after scrolling
+        setScrolling(true);
       } else {
         setScrolling(false);
       }
@@ -46,7 +47,7 @@ function Header() {
           <Image src="/pokemon--logo.png" width={120} height={90} alt="Logo" />
         </Link>
 
-        <SearchForm />
+        {pathname === '/' && <SearchForm />}
       </div>
     </header>
   );
