@@ -2,7 +2,6 @@
 
 'use client';
 
-import React from 'react';
 import {
   Select,
   SelectContent,
@@ -10,12 +9,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Button } from './ui/button';
-import { CircleDot, Delete, Ruler, SortAsc, Weight, Zap } from 'lucide-react';
-import { Input } from './ui/input';
-import { usePokemon } from '@/hooks/usePokemon';
-import { useShallow } from 'zustand/react/shallow';
 import { usePokemonStore } from '@/store/usePokemonStore';
+import { CircleDot, Delete, Ruler, SortAsc, Weight, Zap } from 'lucide-react';
+import { useShallow } from 'zustand/react/shallow';
+import { Button } from './ui/button';
+import { Input } from './ui/input';
 
 const pokemonTypes = [
   'Normal',
@@ -85,6 +83,7 @@ function Filters() {
           >
             <div className="flex items-center gap-1">
               <CircleDot className="mr-2 h-4 w-4 text-gray-400" />
+
               <SelectValue placeholder="Types" />
             </div>
           </SelectTrigger>
@@ -118,7 +117,7 @@ function Filters() {
             ))}
           </SelectContent>
         </Select>
-        {/* 
+
         <div className="relative">
           <Weight className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
 
@@ -142,7 +141,7 @@ function Filters() {
             className="u-shadow-2 w-[180px] pl-9 text-gray-500 font-bold border-none outline-none bg-white rounded-lg
             focus-visible:ring-2 focus-visible:ring-gray-200"
           />
-        </div> */}
+        </div>
 
         <Select
           value={filters.sortOrder}
