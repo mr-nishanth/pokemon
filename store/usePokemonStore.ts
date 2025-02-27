@@ -59,7 +59,6 @@ interface PokemonState {
   currentPage: number;
   allPokemon: Pokemon[];
   originalPokemonListDetails: PokemonDetails[];
-  isHydrated: boolean; // Track hydration status
   fetchPokemon: (page?: number) => Promise<void>;
   fetchAllPokemon: () => Promise<void>;
   fetchPokemonDetails: (pokemonList: Pokemon[]) => Promise<void>;
@@ -87,7 +86,6 @@ export const usePokemonStore = create<PokemonState>()((set, get) => ({
   currentPage: 1,
   allPokemon: [],
   originalPokemonListDetails: [],
-  isHydrated: false, // Default to false until hydration is completed
 
   fetchAllPokemon: async () => {
     try {
@@ -158,12 +156,6 @@ export const usePokemonStore = create<PokemonState>()((set, get) => ({
       console.error('Error fetching pokemon details', error);
       set({ loading: false });
     }
-  },
-
-  // This will be executed after rehydration
-  onRehydrateStorage: (state: PokemonState | undefined) => {
-    console.log('Rehydration finished');
-    set({ isHydrated: true }); // Set hydration status to true
   },
 
   fetchPokemonByName: async (name: string) => {
