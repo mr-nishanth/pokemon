@@ -59,7 +59,7 @@ function SearchForm() {
   }, [isHydrated, filterPokemon]);
 
   return (
-    <div className="relative w-[80%] md:w-[40%] mx-auto">
+    <div className="relative w-full md:w-[40%] mx-auto">
       <div className="relative flex items-center justify-between w-full h-16 rounded-full bg-[#ee9c30] shadow-lg hover:shadow-2xl transition-all duration-300 ease-in-out">
         <Image
           src="/pokemon.gif"
@@ -70,8 +70,8 @@ function SearchForm() {
         />
         <input
           type="text"
-          value={debouncedSearch} // Bind to local debounced state
-          onChange={handleChange} // Update the debounced value
+          value={debouncedSearch}
+          onChange={handleChange}
           placeholder="Search Pokemon by name"
           className="ml-18 w-4/5 mx-auto h-full pl-12 pr-16 rounded-full text-lg text-gray-800 bg-white outline-none placeholder-gray-400 placeholder-opacity-80 focus:ring-0 z-20"
         />
