@@ -7,7 +7,7 @@ import PokemonCard from '@/components/PokemonCard';
 import { usePokemonStore } from '@/store/usePokemonStore';
 import { motion } from 'motion/react';
 import Image from 'next/image';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 
 export default function Home() {
