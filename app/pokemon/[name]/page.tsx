@@ -6,7 +6,7 @@ import Header from '@/components/Header';
 import { motion } from 'motion/react';
 import { usePokemon } from '@/hooks/usePokemon';
 import { typeColor } from '@/utils/colors';
-import { Ruler, Volume2, Weight } from 'lucide-react';
+import { Ruler, Star, Volume2, Weight } from 'lucide-react';
 import Image from 'next/image';
 import { toTitleCase } from '@/lib/utils';
 
@@ -74,9 +74,9 @@ export default function PokemonDetailsPage({ params }: Props) {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.7 }}
       >
-        {/* Left Section: Pokémon Info */}
+        {/* Left Section: Pokemon Info */}
         <div className="flex flex-col justify-center gap-6">
-          {/* Pokémon Name and Cry Buttons */}
+          {/* Pokemon Name and Cry Buttons */}
           <motion.div
             className="flex flex-col gap-1"
             initial={{ opacity: 0 }}
@@ -106,7 +106,7 @@ export default function PokemonDetailsPage({ params }: Props) {
               </button>
             </div>
 
-            <h1 className="text-6xl font-bold capitalize text-white drop-shadow-sm">
+            <h1 className="text-6xl font-bold capitalize text-white drop-shadow-sm mt-4">
               {activePokemon?.name}
             </h1>
           </motion.div>
@@ -211,7 +211,7 @@ export default function PokemonDetailsPage({ params }: Props) {
             </p>
             <p className="p-4 flex flex-col items-center justify-center uppercase text-gray-600 font-bold bg-white rounded-lg">
               <span className="text-sm flex items-center gap-2">
-                <Weight size={18} />
+                <Star size={18} />
                 Base Ex
               </span>
               {activePokemon?.base_experience} xp
@@ -219,7 +219,7 @@ export default function PokemonDetailsPage({ params }: Props) {
           </motion.div>
         </div>
 
-        {/* Right Section: Pokémon Image */}
+        {/* Right Section: Pokemon Image */}
         <div className="relative flex justify-center items-center">
           <Image
             src={`/icons/${activePokemon?.types[0].type.name}.svg`}
