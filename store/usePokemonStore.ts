@@ -4,53 +4,10 @@ import { create } from 'zustand';
 import { POKEMON_BASE_URI, DEFAULT_LIMIT } from '@/constants';
 import axios from 'axios';
 import { fetchWithRetry } from '@/lib/utils';
+import { Filters, Pokemon, PokemonDetails } from '@/types';
+import { initialState } from './initialState';
 
-interface Pokemon {
-  name: string;
-  url: string;
-}
-
-interface PokemonDetails {
-  name: string;
-  types: { type: { name: string } }[];
-  abilities: { ability: { name: string } }[];
-  weight: number;
-  height: number;
-  cries: { legacy: string; latest: string };
-  stats: { base_stat: number; stat: { name: string } }[];
-  sprites: {
-    front_default: string;
-    other: {
-      home: {
-        front_default: string;
-        front_shiny: string;
-        back_default: string;
-        back_shiny: string;
-      };
-      showdown: {
-        front_default: string;
-        front_shiny: string;
-        back_default: string;
-        back_shiny: string;
-      };
-    };
-    front_shiny: string;
-    back_default: string;
-    back_shiny: string;
-  };
-  base_experience: number;
-  moves: { move: { name: string } }[];
-}
-
-interface Filters {
-  type: string;
-  ability: string;
-  weight: string;
-  height: string;
-  sortOrder: string;
-}
-
-interface PokemonState {
+export interface PokemonState {
   loading: boolean;
   pokemonList: Pokemon[];
   pokemonListDetails: PokemonDetails[];
@@ -72,21 +29,7 @@ interface PokemonState {
 }
 
 export const usePokemonStore = create<PokemonState>()((set, get) => ({
-  loading: false,
-  pokemonList: [],
-  pokemonListDetails: [],
-  activePokemon: null,
-  searchQuery: '',
-  filters: {
-    type: '',
-    ability: '',
-    weight: '',
-    height: '',
-    sortOrder: '',
-  },
-  currentPage: 1,
-  allPokemon: [],
-  originalPokemonListDetails: [],
+  ...initialState,
 
   fetchAllPokemon: async () => {
     try {
